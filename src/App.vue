@@ -3,21 +3,24 @@
     <div class="card-task">
       <input class="card-task-input" type="text" v-model="newTask.name" @keypress.enter="setTask">
 
-      {{ newTask }}
-
       <div class="task" v-for="(task, index) in listTasks" :key="task.id">
-        <input class="form-check-input" type="checkbox" @click="checkTask(index, task)">
+        <div class="task__content">
+          <input class="form-check-input" type="checkbox" @click="checkTask(index, task)">
 
-        <div class="task-text" :class="{ 'texto-riscado': task.checked }">
-          {{ task.name }}
+          <div class="task__content__text" :class="{ 'texto-riscado': task.checked }">
+            {{ task.name }}
+          </div>
         </div>
 
-        <div @click="editTask(index, task)">
-          ✏️
+        <div class="task__actions">
+          <div class="task__actions__edit" @click="editTask(index, task)">
+            ✏️
+          </div>
+
+          <div class="task__actions__delete" @click="deleteTask(index)">
+            ❌
+          </div>
         </div>
-
-
-
       </div>
     </div>
   </div>
@@ -87,6 +90,12 @@ export default {
         indexEditing: index,
         isEditing: true
       }
+    },
+
+    deleteTask(index) {
+      const newListTask = [...this.listTasks]
+      newListTask.splice(index, 1)
+      this.listTasks = newListTask
     }
   }
 }
@@ -110,10 +119,27 @@ export default {
 
 .task {
   display: flex;
-}
+  justify-content: space-between;
 
-.task-text {
-  margin-left: 10px;
+  &__content {
+    display: flex;
+
+    &__text {
+      margin-left: 10px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+
+    &__edit, &__delete {
+      cursor: pointer;
+
+      &:hover {
+        background-color: #ced4da;
+      }
+    }
+  }
 }
 
 .texto-riscado {
